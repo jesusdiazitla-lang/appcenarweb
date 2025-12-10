@@ -48,7 +48,7 @@ exports.mostrarRegistroComercio = async (req, res) => {
   }
 };
 
-// Procesar LOGIN
+// Procesar LOGIN - VERSIÓN CORREGIDA
 exports.login = async (req, res) => {
   try {
     console.log('=== INICIO LOGIN ===');
@@ -81,6 +81,7 @@ exports.login = async (req, res) => {
       return res.redirect('/auth/login');
     }
 
+    // ✅ SOLUCIÓN DEFINITIVA: Asignar directamente sin regenerar
     req.session.user = {
       id: usuario._id.toString(),
       rol: usuario.rol,
@@ -91,15 +92,18 @@ exports.login = async (req, res) => {
     };
 
     console.log('Sesión creada:', req.session.user);
+    console.log('Session ID:', req.sessionID);
 
-    req.session.save((err) => {
-      if (err) {
-        console.error('❌ Error al guardar sesión:', err);
+    // ✅ CRÍTICO: Guardar y esperar confirmación
+    req.session.save((saveErr) => {
+      if (saveErr) {
+        console.error('❌ Error al guardar sesión:', saveErr);
         req.flash('error', 'Error interno al establecer la sesión.');
         return res.redirect('/auth/login');
       }
       
       console.log('✅ Sesión guardada exitosamente');
+      console.log('✅ Cookie debe ser enviada al navegador');
       console.log('=== FIN LOGIN ===');
       
       // ✅ Si es admin y requiere cambio de password, redirigir a cambiar contraseña
@@ -107,7 +111,15 @@ exports.login = async (req, res) => {
         return res.redirect('/admin/cambiar-password');
       }
       
-      res.redirect(getRoleHome(usuario.rol));
+      // Redirigir según rol
+      const redirectPaths = {
+        cliente: '/cliente/home',
+        comercio: '/comercio/home',
+        delivery: '/delivery/home',
+        administrador: '/admin/dashboard'
+      };
+      
+      res.redirect(redirectPaths[usuario.rol] || '/auth/login');
     });
 
   } catch (error) {

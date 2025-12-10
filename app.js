@@ -8,7 +8,7 @@ const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const methodOverride = require('method-override');
 const connectDB = require('./config/database');
-const checkPasswordChange = require('./middleware/checkPasswordChange');  // ✅ NUEVO
+const checkPasswordChange = require('./middleware/checkPasswordChange');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -78,6 +78,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
+// ✅ CORRECCIÓN: Trust proxy para Railway/Heroku
+app.set('trust proxy', 1); // SIEMPRE activado
+console.log('✅ Trust proxy activado');
+
 // ========== CONFIGURACIÓN DE SESIONES ==========
 if (!PREVIEW) {
   // ✅ Determinar la URL de MongoDB según el entorno
@@ -97,7 +101,10 @@ if (!PREVIEW) {
     process.exit(1);
   }
 
-  app.use(session({
+  // ✅ CORRECCIÓN CRÍTICA: Configuración de cookies para Railway
+  const isProduction = process.env.NODE_ENV === 'production';
+  
+  const sessionConfig = {
     secret: process.env.SESSION_SECRET || 'fallback-secret-key-change-in-production',
     resave: false,
     saveUninitialized: false,
@@ -107,14 +114,25 @@ if (!PREVIEW) {
       ttl: 7 * 24 * 60 * 60 // 7 días
     }),
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 días
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
-    }
-  }));
+      // ✅ SOLUCIÓN RAILWAY: NO usar secure:true ni sameSite:none
+      // Railway maneja SSL en el proxy, la app recibe HTTP
+      secure: false, // Siempre false, Railway maneja HTTPS en el proxy
+      sameSite: 'lax', // lax funciona mejor que none en Railway
+      path: '/', // Explícitamente definir path
+    },
+    name: 'appcenar.sid',
+    proxy: true // Siempre true para confiar en Railway proxy
+  };
+
+  app.use(session(sessionConfig));
 
   console.log('✅ Sesiones configuradas con MongoDB Store');
+  console.log('   - Secure cookies:', sessionConfig.cookie.secure);
+  console.log('   - SameSite:', sessionConfig.cookie.sameSite);
+  console.log('   - Proxy:', sessionConfig.proxy);
+  console.log('   - Path:', sessionConfig.cookie.path);
 } else {
   app.use(session({
     secret: 'preview-secret',
@@ -140,6 +158,7 @@ app.use((req, res, next) => {
   console.log('🔍 Middleware variables globales:');
   console.log('   - Usuario en sesión:', req.session?.user?.rol || 'Ninguno');
   console.log('   - isAuthenticated:', res.locals.isAuthenticated);
+  console.log('   - Session ID:', req.sessionID); // ✅ Debug adicional
 
   next();
 });
@@ -205,5 +224,9 @@ app.listen(PORT, () => {
   console.log(`  AppCenar corriendo en http://localhost:${PORT}`);
   console.log(`  Entorno: ${process.env.NODE_ENV || 'development'}`);
   console.log(`  Preview Mode: ${PREVIEW}`);
+  if (process.env.NODE_ENV === 'production') {
+    console.log('  🔒 HTTPS Mode: Activado');
+    console.log('  🍪 Secure Cookies: Activadas');
+  }
   console.log('═══════════════════════════════════════');
 });
