@@ -1,0 +1,393 @@
+/* ========================================
+   AppCenar - Estilos del Cliente
+   Diseño Moderno Unificado
+   ======================================== */
+
+/* Variables de Color */
+:root {
+  --primary-color: #E91E63;
+  --primary-dark: #C2185B;
+  --primary-light: #F8BBD0;
+  --secondary-color: #FF6B9D;
+  --accent-color: #FF4081;
+  --success-color: #4CAF50;
+  --warning-color: #FFC107;
+  --danger-color: #F44336;
+  --dark-color: #263238;
+  --light-bg: #FAFAFA;
+  --white: #FFFFFF;
+  --text-primary: #263238;
+  --text-secondary: #607D8B;
+  --border-radius: 16px;
+  --border-radius-sm: 12px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Tipografía */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #FFF5F7 0%, #FAFAFA 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-primary);
+}
+
+main {
+  flex: 1;
+}
+
+/* ===== Navbar Moderna ===== */
+.navbar {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 1rem 0;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.nav-link {
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.3s ease;
+  border-radius: var(--border-radius-sm);
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ===== Cards Modernas ===== */
+.card {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--white);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* ===== Cards de Comercios Mejoradas ===== */
+.hover-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  position: relative;
+  border-radius: var(--border-radius);
+}
+
+.hover-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+}
+
+.hover-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(233, 30, 99, 0.1) 0%, rgba(255, 107, 157, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: var(--border-radius);
+  pointer-events: none;
+}
+
+.hover-card:hover::before {
+  opacity: 1;
+}
+
+/* Logo del comercio con animación */
+.hover-card:hover .bg-white.rounded-3 {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+/* Botón de favorito moderno */
+.btn-light.rounded-circle {
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 2px solid rgba(233, 30, 99, 0.2);
+  width: 44px;
+  height: 44px;
+}
+
+.btn-light.rounded-circle:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 16px rgba(233, 30, 99, 0.3) !important;
+  background: var(--white) !important;
+  border-color: var(--primary-color);
+}
+
+/* Botones generales modernos */
+.btn {
+  border-radius: var(--border-radius-sm);
+  padding: 0.75rem 1.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--success-color) 0%, #66BB6A 100%);
+  color: var(--white);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #388E3C 0%, var(--success-color) 100%);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+}
+
+.btn-outline-success {
+  border: 2px solid var(--success-color);
+  color: var(--success-color);
+  background: transparent;
+}
+
+.btn-outline-success:hover {
+  background: var(--success-color);
+  color: var(--white);
+}
+
+.btn-outline-secondary {
+  border: 2px solid #E0E0E0;
+  color: var(--text-secondary);
+  background: transparent;
+}
+
+.btn-outline-secondary:hover {
+  background: var(--text-secondary);
+  color: var(--white);
+  border-color: var(--text-secondary);
+}
+
+.btn.rounded-pill {
+  border-radius: 50px;
+  padding: 0.65rem 2rem;
+}
+
+/* ===== Badges Modernos ===== */
+.badge {
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+}
+
+.badge.bg-success {
+  background: linear-gradient(135deg, var(--success-color) 0%, #66BB6A 100%) !important;
+}
+
+.badge.bg-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+}
+
+.badge.bg-warning {
+  background: linear-gradient(135deg, var(--warning-color) 0%, #FFD54F 100%) !important;
+}
+
+/* ===== Inputs Modernos ===== */
+.form-control,
+.form-select {
+  border-radius: var(--border-radius-sm);
+  padding: 0.875rem 1.25rem;
+  border: 2px solid #E0E0E0;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  background: var(--white);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(233, 30, 99, 0.1);
+  background: var(--white);
+}
+
+/* ===== Cards de direcciones ===== */
+.direccion-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: var(--border-radius-sm);
+  border: 2px solid #E0E0E0;
+}
+
+.direccion-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 16px rgba(233, 30, 99, 0.15);
+  transform: translateY(-2px);
+}
+
+.direccion-card input:checked + label {
+  color: var(--primary-color);
+}
+
+.direccion-card input:checked ~ .card-body {
+  background: linear-gradient(135deg, rgba(233, 30, 99, 0.05) 0%, rgba(255, 107, 157, 0.05) 100%);
+  border-left: 4px solid var(--primary-color);
+}
+
+/* ===== Cards de productos en catálogo ===== */
+.producto-card {
+  transition: all 0.2s ease;
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  border: none;
+}
+
+.producto-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ===== Carrito ===== */
+#carrito-body {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+#carrito-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+#carrito-body::-webkit-scrollbar-track {
+  background: #F5F5F5;
+  border-radius: 10px;
+}
+
+#carrito-body::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 10px;
+}
+
+#carrito-body::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* ===== Alertas Modernas ===== */
+.alert {
+  border-radius: var(--border-radius-sm);
+  border: none;
+  padding: 1rem 1.25rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+  color: #2E7D32;
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+  color: #C62828;
+}
+
+.alert-warning {
+  background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+  color: #F57F17;
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  color: #1565C0;
+}
+
+/* ===== Tipografía ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.fw-bold {
+  font-weight: 700 !important;
+}
+
+.text-muted {
+  color: var(--text-secondary) !important;
+}
+
+.text-success {
+  color: var(--success-color) !important;
+}
+
+/* ===== Imágenes ===== */
+img {
+  border-radius: var(--border-radius-sm);
+}
+
+/* ===== Footer ===== */
+.footer {
+  margin-top: auto;
+  background: var(--dark-color) !important;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Animaciones ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .sticky-top {
+    position: relative !important;
+    top: 0 !important;
+  }
+
+  .hover-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .btn {
+    padding: 0.65rem 1.5rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+}
