@@ -3,3 +3,12 @@ node_modules/
 *.log
 .DS_Store
 public/uploads/
+
+```
+# Testing
+coverage/
+.nyc_output/
+*.test.js.snap
+
+# Environment
+.env.test

@@ -28,15 +28,15 @@ const usuarioSchema = new mongoose.Schema({
     type: String,
     default: null
   },
-  tokenResetPassword: {  // ✅ Para recuperación de contraseña
+  tokenResetPassword: {
     type: String,
     default: null
   },
-  tokenExpiracion: {  // ✅ Fecha de expiración del token de reset
+  tokenExpiracion: {
     type: Date,
     default: null
   },
-  requiereCambioPassword: {  // ✅ Para forzar cambio de contraseña
+  requiereCambioPassword: {
     type: Boolean,
     default: false
   },
@@ -54,7 +54,7 @@ const usuarioSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
-  fotoPerfil: {  // ✅ Para cliente y delivery
+  fotoPerfil: {
     type: String,
     default: null
   },
@@ -70,7 +70,7 @@ const usuarioSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
-  logoComercio: {  // ✅ CORRECCIÓN: Cambiar de 'logo' a 'logoComercio'
+  logoComercio: {
     type: String,
     default: null
   },
@@ -102,10 +102,13 @@ const usuarioSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Índices para búsquedas eficientes
+// ======================================================
+// 📊 ÍNDICES PARA BÚSQUEDAS EFICIENTES
+// ======================================================
+// ✅ Solo crear índices que NO sean unique (unique ya crea su propio índice)
 usuarioSchema.index({ rol: 1 });
 usuarioSchema.index({ activo: 1 });
-usuarioSchema.index({ nombreUsuario: 1 });
+// ❌ NO crear índice en nombreUsuario porque ya tiene unique: true
 
 // ======================================================
 // 🔑 HOOK: Hash de contraseña antes de guardar

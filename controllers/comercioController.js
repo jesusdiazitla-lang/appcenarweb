@@ -1,7 +1,7 @@
 const Usuario = require('../models/Usuario');
 const Pedido = require('../models/Pedido');
-const Categoria = require('../models/Categoria');
-const Producto = require('../models/Producto');
+//const Categoria = require('../models/Categoria');
+//const Producto = require('../models/Producto');
 
 // Mostrar home del comercio (listado de pedidos)
 exports.mostrarHome = async (req, res) => {

@@ -1,0 +1,182 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold"><i class="bi bi-graph-up"></i> Métricas del Sistema</h2>
+      <p class="text-muted mb-0">Monitoreo en tiempo real de AppCenar</p>
+    </div>
+    <div>
+      <button onclick="location.reload()" class="btn btn-primary me-2">
+        <i class="bi bi-arrow-clockwise"></i> Actualizar
+      </button>
+      <form action="/metrics/reset" method="POST" style="display: inline;">
+        <button type="submit" class="btn btn-outline-danger">
+          <i class="bi bi-trash"></i> Resetear
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Resumen General -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="bg-primary bg-opacity-10 p-3 rounded-3 me-3">
+              <i class="bi bi-clock-history text-primary fs-3"></i>
+            </div>
+            <div>
+              <h6 class="text-muted mb-1">Uptime</h6>
+              <h4 class="mb-0">{{summary.uptime}}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="bg-success bg-opacity-10 p-3 rounded-3 me-3">
+              <i class="bi bi-speedometer2 text-success fs-3"></i>
+            </div>
+            <div>
+              <h6 class="text-muted mb-1">Total Requests</h6>
+              <h4 class="mb-0">{{summary.totalRequests}}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="bg-info bg-opacity-10 p-3 rounded-3 me-3">
+              <i class="bi bi-check-circle text-info fs-3"></i>
+            </div>
+            <div>
+              <h6 class="text-muted mb-1">Success Rate</h6>
+              <h4 class="mb-0">{{summary.successRate}}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="bg-warning bg-opacity-10 p-3 rounded-3 me-3">
+              <i class="bi bi-memory text-warning fs-3"></i>
+            </div>
+            <div>
+              <h6 class="text-muted mb-1">Memory Usage</h6>
+              <h4 class="mb-0">{{summary.memoryUsage}}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Requests -->
+  <div class="row g-4 mb-4">
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Estadísticas de Requests</h5>
+        </div>
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-4">
+              <h2 class="text-primary">{{metrics.requests.total}}</h2>
+              <p class="text-muted mb-0">Total</p>
+            </div>
+            <div class="col-4">
+              <h2 class="text-success">{{metrics.requests.success}}</h2>
+              <p class="text-muted mb-0">Exitosos</p>
+            </div>
+            <div class="col-4">
+              <h2 class="text-danger">{{metrics.requests.errors}}</h2>
+              <p class="text-muted mb-0">Errores</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><i class="bi bi-server"></i> Sistema</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-2">
+            <small class="text-muted">CPU Cores:</small>
+            <strong class="float-end">{{metrics.system.cpu.cores}}</strong>
+          </div>
+          <div class="mb-2">
+            <small class="text-muted">Memoria Usada:</small>
+            <strong class="float-end">{{metrics.system.memory.used}}</strong>
+          </div>
+          <div class="mb-2">
+            <small class="text-muted">Memoria Total:</small>
+            <strong class="float-end">{{metrics.system.memory.total}}</strong>
+          </div>
+          <div class="mb-2">
+            <small class="text-muted">Platform:</small>
+            <strong class="float-end">{{metrics.system.platform.type}}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Endpoints -->
+  <div class="row g-4">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><i class="bi bi-list-ol"></i> Top Endpoints</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Endpoint</th>
+                  <th class="text-center">Requests</th>
+                  <th class="text-center">Success Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each summary.topEndpoints}}
+                  <tr>
+                    <td><code>{{this.endpoint}}</code></td>
+                    <td class="text-center">
+                      <span class="badge bg-primary">{{this.count}}</span>
+                    </td>
+                    <td class="text-center">
+                      <span class="badge bg-success">{{this.successRate}}</span>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Auto-refresh cada 30 segundos
+  setTimeout(() => {
+    location.reload();
+  }, 30000);
+</script>

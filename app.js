@@ -9,6 +9,9 @@ const flash = require('connect-flash');
 const methodOverride = require('method-override');
 const connectDB = require('./config/database');
 const checkPasswordChange = require('./middleware/checkPasswordChange');
+const logger = require('./config/winston');
+const requestLogger = require('./middleware/requestLogger');
+const metricsCollector = require('./monitoring/metrics');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -75,6 +78,7 @@ console.log('✅ Helpers de Handlebars registrados correctamente');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(requestLogger);
 app.use(methodOverride('_method'));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
@@ -102,7 +106,7 @@ if (!PREVIEW) {
   }
 
   // ✅ CORRECCIÓN CRÍTICA: Configuración de cookies para Railway
-  const isProduction = process.env.NODE_ENV === 'production';
+  const _isProduction = process.env.NODE_ENV === 'production';
   
   const sessionConfig = {
     secret: process.env.SESSION_SECRET || 'fallback-secret-key-change-in-production',
@@ -166,12 +170,26 @@ app.use((req, res, next) => {
 // ✅ NUEVO: Middleware para verificar cambio de contraseña (ANTES de las rutas)
 app.use(checkPasswordChange);
 
+
+// Middleware de métricas
+app.use((req, res, next) => {
+  const start = Date.now();
+  
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    metricsCollector.recordRequest(req, res, duration);
+  });
+  
+  next();
+});
 // ========== RUTAS ==========
 const authRoutes = require('./routes/authRoutes');
 const clienteRoutes = require('./routes/clienteRoutes');
 const comercioRoutes = require('./routes/comercioRoutes');
 const deliveryRoutes = require('./routes/deliveryRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const metricsRoutes = require('./routes/metricsRoutes');
+const healthRoutes = require('./routes/healthRoutes');
 
 app.use('/auth', authRoutes);
 app.use('/cliente', clienteRoutes);
@@ -207,7 +225,7 @@ app.use((req, res) => {
 });
 
 // ❗ ERROR 500
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   console.error('❌ Error:', err);
   res.status(err.status || 500).render('errors/500', {
     layout: 'layouts/public',
@@ -230,3 +248,12 @@ app.listen(PORT, () => {
   }
   console.log('═══════════════════════════════════════');
 });
+
+logger.info('🚀 Servidor iniciado', {
+  port: PORT,
+  environment: process.env.NODE_ENV,
+  preview: PREVIEW
+});
+
+// Iniciar logging periódico de métricas
+metricsCollector.startPeriodicLogging(5); // Cada 5 minutos
