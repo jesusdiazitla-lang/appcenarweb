@@ -1,0 +1,65 @@
+# ============================================
+# .dockerignore - AppCenar
+# Archivos a excluir del build de Docker
+# ============================================
+
+# Node modules
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Archivos de entorno
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentación
+README.md
+CHANGELOG.md
+LICENSE
+docs/
+
+# Tests
+tests/
+coverage/
+.nyc_output/
+*.test.js
+*.spec.js
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Archivos temporales
+tmp/
+temp/
+.tmp/
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Archivos de desarrollo
+scripts/
+public/uploads/*
+!public/uploads/.gitkeep
